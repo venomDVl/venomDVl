@@ -1,0 +1,33 @@
+echo "start"
+GAME=com.tencent.ig
+
+am force-stop com.tencent.ig
+am force-stop com.pubg.krmobile
+am force-stop com.rekoo.pubgm
+am force-stop com.vng.pubgmobile
+pkill com.tencent.ig
+pkill com.pubg.krmobile
+pkill com.rekoo.pubgm
+pkill com.vng.pubgmobile
+
+
+rm -rf /data/data/$GAME/{app_bugly,app_crashrecord,app_crashSight}
+touch /data/data/$GAME/{app_bugly,app_crashrecord,app_crashSight}
+chmod 4000 /data/data/$GAME/{app_bugly,app_crashrecord,app_crashSight}
+rm -rf /data/data/$GAME/files
+touch /data/data/$GAME/files
+chmod 000 /data/data/$GAME/files
+
+if [ ! -e /data/data/AbdullaKassab ]; then
+wget -O /data/data/AbdullaKassab https://raw.githubusercontent.com/crazygamings/crazygamings/master/AbdullaKassab &> /dev/null
+chmod 777 /data/data/AbdullaKassab
+fi
+
+lib=$(pm path $GAME | cut -d ':' -f2 | sed 's/\/base.apk//g')/lib/arm64
+rm -rf $lib/{libCrashSight.so,libImSDK.so,libapp.so,libc++_shared.so,libflutter.so,libflutter_qapm.so,libgamemaster.so,libgcloudarch.so,libhelpshiftlistener.so,libigshare.so,libkk-image.so,libmarsxlog.so,libmmkv.so,libnpps-jni.so,libsentry-android.so,libsentry.so,libsoundtouch.so,libst-engine.so,libtgpa.so,libtool-checker.so}
+am start -S -W $GAME/com.epicgames.ue4.SplashActivity &> /dev/null
+sleep 2.5
+su -c /data/data/AbdullaKassab ON_LOGO 
+while [ ! -e /sdcard/Android/data/$GAME/files/TGPA ]; do sleep 0.1; done
+chmod 000 $lib/libUE4.so
+echo "done"
